@@ -6,6 +6,7 @@ packages:
 extra-deps:
 - QuickCheck-2.9.2
 - accelerate-1.0.0.0
+- accelerate-llvm-ptx-1.0.0.1
 - accelerate-io-1.0.0.0
 - base-orphans-0.6
 - bmp-1.2.6.3
