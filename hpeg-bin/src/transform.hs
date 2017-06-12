@@ -10,3 +10,4 @@ main = do
   case pg of
     "bmp2hpeg" -> bmp2hpeg from to run
     "hpeg2bmp" -> hpeg2bmp from to run
+    _          -> putStrLn "Error program name"
