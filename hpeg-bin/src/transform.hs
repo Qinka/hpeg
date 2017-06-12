@@ -1,6 +1,6 @@
 module Main where
 
-import           Data.Array.Accelerate.Interpreter
+import           Backend
 import           Graphics.Hpeg
 import           System.Environment
 main :: IO ()
