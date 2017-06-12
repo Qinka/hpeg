@@ -15,11 +15,13 @@ module  Graphics.Hpeg.Store
         , writeHpeg
         ) where
 
+import           Codec.Compression.Lzma ()
+import qualified Codec.Compression.Lzma as Lzma
 import           Control.Monad
-import           Data.Binary     (Binary, get, getWord8, put)
-import qualified Data.Binary     as Bin
-import           Data.ByteString ()
-import qualified Data.ByteString as B
+import           Data.Binary            (Binary, get, getWord8, put)
+import qualified Data.Binary            as Bin
+import           Data.ByteString        ()
+import qualified Data.ByteString        as B
 import           Data.Word
 
 
@@ -32,14 +34,19 @@ instance Binary HpegStore where
     put ((0x48,0x70,0x45,0x67) :: (Word8,Word8,Word8,Word8))
     put uSize
     put vSize
-    put hData
+    let hD = Lzma.compress $ Bin.encode hData
+    put hD
   get = do
     h <- getWord8
     p <- getWord8
     e <- getWord8
     g <- getWord8
     case (h,p,e,g) of
-      (0x48,0x70,0x45,0x67) -> liftM3 HpegStore get get get
+      (0x48,0x70,0x45,0x67) -> do
+        uS <- get
+        vS <- get
+        hD <- Lzma.decompress <$> get
+        return $ HpegStore uS vS $ Bin.decode hD
       _                     -> error "error magic number"
 
 
