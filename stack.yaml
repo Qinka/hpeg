@@ -30,5 +30,13 @@ extra-deps:
 - dlist-0.8.0.2
 - llvm-hs-4.0.1.0
 - llvm-hs-pure-4.0.0.0
+- abstract-deque-0.3
+- chaselev-deque-0.5.0.5
+- data-default-class-0.1.2.0
+- mwc-random-0.13.6.0
+- parsec-3.1.11
+- utf8-string-1.0.1.1
+
+
 
 resolver: ghc-8.0.2
