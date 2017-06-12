@@ -28,6 +28,16 @@ executable bmphpeg
                      , hpeg == 0.1.*
   hs-source-dirs:      src
   default-language:    Haskell2010
+  ghc-options: -threaded -rtsopts -eventlog
+               -with-rtsopts=-n2M -with-rtsopts=-A64M -with-rtsopts=-N
+               -with-rtsopts=-p -with-rtsopts=-s
+               -with-rtsopts=-hs -with-rtsopts=-hmMain -with-rtsopts=-hc -with-rtsopts=-hb -with-rtsopts=-hr
+               -with-rtsopts=-ls
+               -O3
+               -prof -fprof-auto
+               
+
+  
   if (flag(llvm-ptx))
      hs-source-dirs: backend/llvm-ptx
      build-depends:    accelerate-llvm-ptx
