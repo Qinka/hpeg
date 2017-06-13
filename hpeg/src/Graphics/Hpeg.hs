@@ -46,8 +46,8 @@ hpeg2bmp fp ofp runAcc = do
   writeImageToBMP ofp real
 
 bmp2hpeg :: FilePath -> FilePath
-         -> (A.Acc (A.Array A.DIM2 Word8)
-                -> (A.Array A.DIM2 Word8))
+         -> (A.Acc (A.Array A.DIM2 Word16)
+                -> (A.Array A.DIM2 Word16))
          -> IO ()
 bmp2hpeg fp ofp runAcc = do
   bmpdata <- readImageFromBMP fp

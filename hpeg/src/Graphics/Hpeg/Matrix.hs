@@ -36,7 +36,7 @@ import qualified Data.Word                as Word
 mkBlockIndex :: Word16 -> Word16 -> [(Word16,Word16)]
 mkBlockIndex u v = [(a,b) | a <- [1..u], b <- [1..v]]
 
-mkBlock :: Array (Word32,Word32) Word8 -> (Word16,Word16) -> [(Word8,Word8)]
+mkBlock :: Array (Word32,Word32) Word16 -> (Word16,Word16) -> [(Word16,Word16)]
 mkBlock arr (bi,bj)  = filter ((/=0).snd) $ map trans items
   where items = [(i,j,arr ! mkIndex bi bj i j) | i <- [1..8], j <- [1..8], check i j]
         trans (i',j',x') = let i = fromIntegral i'
@@ -46,7 +46,7 @@ mkBlock arr (bi,bj)  = filter ((/=0).snd) $ map trans items
         (u,v) = maximum $ indices arr
         check i j = fromIntegral (bi-1) * 8 + fromIntegral i <= u
                  && fromIntegral (bj-1) * 8 + fromIntegral j <= v
-toBlocks :: Array (Word32,Word32) Word8 -> ([[(Word8,Word8)]],Word32,Word32)
+toBlocks :: Array (Word32,Word32) Word16 -> ([[(Word16,Word16)]],Word32,Word32)
 toBlocks arr = (map (mkBlock arr) indexs,u,v)
   where (u,v) = maximum $ indices arr
         blockSize var = fromIntegral $ div var 8 + 1
@@ -60,7 +60,7 @@ mkIndex bi' bj' i' j' = (bi*8+i,bj*8+j)
         i  = fromIntegral i'
         j  = fromIntegral j'
 
-fromBlocks :: [[(Word8,Word8)]] -> Word32 -> Word32 -> Array (Word32,Word32) Word8
+fromBlocks :: [[(Word16,Word16)]] -> Word32 -> Word32 -> Array (Word32,Word32) Word16
 fromBlocks its u v = array ((1,1),(u,v)) $ zeros ++ arr
   where p = fromIntegral $ div u 8 + 1
         q = fromIntegral $ div v 8 + 1
@@ -69,17 +69,17 @@ fromBlocks its u v = array ((1,1),(u,v)) $ zeros ++ arr
         arr = concat $ zipWith (\it (p,q) -> map (kmBlock (fromIntegral p,fromIntegral q)) it) its indexs
 
 
-kmBlock :: (Word32,Word32) -> (Word8,Word8) -> ((Word32,Word32),Word8)
+kmBlock :: (Word32,Word32) -> (Word16,Word16) -> ((Word32,Word32),Word16)
 kmBlock (bi,bj) (ij,x) = (((bi-1)*8+i,(bj-1)*8+j),x)
   where i = fromIntegral $ div ij 16
         j = fromIntegral $ mod ij 16
 
 
-fromArray :: Array (Word32,Word32) Word8 -> A.Array DIM2 Word8
+fromArray :: Array (Word32,Word32) Word16 -> A.Array DIM2 Word16
 fromArray arr =A.fromList (Z :. fromIntegral u :. fromIntegral v) $ elems arr
   where (u,v) = maximum $ indices arr
 
-toArray :: A.Array DIM2 Word8 -> Array (Word32,Word32) Word8
+toArray :: A.Array DIM2 Word16 -> Array (Word32,Word32) Word16
 toArray arr = array ((1,1),(u,v)) $ zipWith (\i x -> (i,x)) indexs list
   where (Z :. u' :. v') = A.arrayShape arr
         u = fromIntegral u'

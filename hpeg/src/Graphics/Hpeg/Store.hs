@@ -27,7 +27,7 @@ import           Data.Word
 
 data HpegStore = HpegStore { uSize :: !Word32
                            , vSize :: !Word32
-                           , hData :: [[[(Word8,Word8)]]]
+                           , hData :: [[[(Word16,Word16)]]]
                            }
 instance Binary HpegStore where
   put HpegStore{..} = do
