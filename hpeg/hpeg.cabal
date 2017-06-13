@@ -2,7 +2,7 @@
 -- see http://haskell.org/cabal/users-guide/
 
 name:                hpeg
-version:             0.1.0.0
+version:             0.1.1.0
 synopsis:            A self-defined jpeg, named hpeg.
 description:         A self-defined jpeg, named hpeg.
 license:             GPL-3
