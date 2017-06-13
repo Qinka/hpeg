@@ -177,7 +177,7 @@ dct2 :: (A.RealFrac e,ToFloating Word16 e,ToFloating Word8 e,ToFloating Int e,El
 dct2 mat coe' = let matF = A.map (\x -> x - 128) $ deroundFromWord8 mat
                     coe  = mkRealCoe (A.shape mat) coe'
                     dctM = realdct28 matF
-                    fin  = A.map (\x -> 256 * (x + 128)) $ A.zipWith (/) dctM coe
+                    fin  = A.map (\x -> 32 * (x + 128)) $ A.zipWith (/) dctM coe
                 in roundToWord16 fin
 -- | idct with quantifing
 idct2 :: (A.RealFrac e,ToFloating Word16 e,ToFloating Int e,Elt e,A.Floating e)
@@ -185,7 +185,7 @@ idct2 :: (A.RealFrac e,ToFloating Word16 e,ToFloating Int e,Elt e,A.Floating e)
       -> Acc (Array DIM2 e)     -- ^ coefficient
       -> Acc (Array DIM2 Word8) -- ^ output
 idct2 mat coe' = let matF = deroundFromWord16 mat
-                     matD = A.map (\x -> x / 256 - 128) matF
+                     matD = A.map (\x -> x / 32 - 128) matF
                      matC = A.zipWith (*) matD coe
                      dctM = realidct28 matC
                      coe  = mkRealCoe (A.shape mat) coe'
